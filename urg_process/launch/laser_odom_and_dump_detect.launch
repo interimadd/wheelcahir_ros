@@ -1,0 +1,16 @@
+<launch>
+
+	<param name="use_sim_time" value="true"/>
+
+	<node pkg="tf" type="static_transform_publisher" name="base_link_to_laser" args="0.7 0.0 1.09 0.0 0.65 0.0 /base_link /laser 40" />
+	<node pkg="tf" type="static_transform_publisher" name="base_link_to_map_center" args="1.5 0.0 0.0 0.0 0.0 0.0 /base_link /map_center 40" />
+
+	<node pkg="urg_process" type="base_link_to_odom.py" name="base_link_to_odom" output="screen"/>
+	<node pkg="urg_process" type="dump_detect_by_laser_and_odom.py" name="dump_detect" output="screen"/>
+	<node pkg="urg_process" type="laser_scan_to_point_cloud" name="laser_to_point" output="screen"/>
+	<node pkg="using_markers" type="visualize_vector_field" name="visualaize_dump" output="screen" />
+	<node pkg="using_markers" type="visualize_pointcloud" name="visualize_pointcloud" output="screen"/>
+	<node pkg="rosbag" type="play" name="play" args="/home/ishikawa/bagfiles/detect_small_midle_big_object_as_step.bag --clock"/>
+	<node pkg="rviz" type="rviz" name="rviz" args="-d /home/ishikawa/catkin_ws/src/urg_process/launch/dump.rviz"/>
+
+</launch>

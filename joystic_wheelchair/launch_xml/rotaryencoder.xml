@@ -1,0 +1,10 @@
+<launch>
+
+  <arg name="encorder_port" />
+
+  <param name="encorder_port" type="string" value="$(arg encorder_port)" />
+  <node pkg="joystic_wheelchair" type="calculate_odometory_from_rotary_encoder.py" name="calc_odom" output="screen"/>
+
+  <node pkg="urg_process" type="base_link_to_odom.py" name="base_link_to_odom"/>
+
+</launch>

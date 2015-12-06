@@ -1,0 +1,8 @@
+<launch>
+
+  <node pkg="keyboard" type="keyboard" name="keyboard"/>
+
+  <param name="arduino_port" value="/dev/ttyACM0" />
+  <node pkg="joystic_wheelchair" type="connect_with_arduino" name="connect_with_arduino" output="screen"/>
+
+</launch>

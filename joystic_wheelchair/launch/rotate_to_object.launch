@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+
+<launch>
+
+<node name="hokuyo" pkg="hokuyo_node" type="hokuyo_node">
+    <param name="port" type="string" value="/dev/ttyACM3" />
+    <remap from="scan" to="scan" />
+</node>
+
+<node pkg="joystic_wheelchair" type="rotate_to_object" name="rotate_to_object"/>
+
+<param name="arduino_port" value="/dev/ttyACM1" />
+<node pkg="joystic_wheelchair" type="send_voltage_to_arduino" name="send_voltage_to_arduino"/>
+
+
+
+</launch>

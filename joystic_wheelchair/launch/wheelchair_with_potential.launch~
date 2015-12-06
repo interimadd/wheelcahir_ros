@@ -1,0 +1,16 @@
+<launch>
+
+  <node pkg="keyboard" type="keyboard" name="keyboard"/>
+  <node name="hokuyo" pkg="hokuyo_node" type="hokuyo_node">
+        <param name="port" type="string" value="/dev/ttyACM2" />
+        <remap from="scan" to="scan" />
+    </node>
+
+  <node pkg="urg_process" type="laser_to_grid" name="laser_to_grid"/>
+  <node pkg="urg_process" type="grid_to_rviz" name="grid_to_rviz"/>
+  <node pkg="rviz" type="rviz" name="rviz"/>
+  
+  <node pkg="joystic_wheelchair" type="calculate_potential" name="calculate_potential"/>
+  <node pkg="joystic_wheelchair" type="send_voltage_to_arduino" name="send_voltage_to_arduino"/>
+
+</launch>

@@ -1,0 +1,36 @@
+<launch>
+  
+  <param name="pub_map_odom_transform" value="true"/> 
+  <param name="map_frame" value="map"/> 
+  <param name="base_frame" value="base_frame"/> 
+  <param name="odom_frame" value="odom"/>
+
+  <node name="hokuyo" pkg="hokuyo_node" type="hokuyo_node">
+        <param name="port" type="string" value="/dev/ttyACM1" />
+        <remap from="scan" to="scan" />
+  </node>
+  <node pkg="tf" type="static_transform_publisher" name="map_2_odom" args="0 0 0 0 0 0 /map /odom 100"/>
+  <node pkg="tf" type="static_transform_publisher" name="odom_2_base_footprint" args="0 0 0 0 0 0 /odom /base_footprint 100"/>
+  <node pkg="tf" type="static_transform_publisher" name="base_footprint_2_base_link" args="0 0 0 0 0 0 /base_footprint /base_link 100"/> 
+  <node pkg="tf" type="static_transform_publisher" name="base_link_2_base_stabilized_link" args="0 0 0 0 0 0 /base_link /base_stabilized 100"/> 
+  <node pkg="tf" type="static_transform_publisher" name="base_stablized_2_base_frame" args="0 0 0 0 0 0 /base_stabilized /base_frame 100"/> 
+  <node pkg="tf" type="static_transform_publisher" name="base_frame_2_laser_link" args="0 0 0 0 0 0 /base_frame /laser 100"/> 
+  <node pkg="tf" type="static_transform_publisher" name="base_2_nav_link" args="0 0 0 0 0 0 /base_frame /nav 100"/>
+
+  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find hector_slam_example)/launch/rviz_cfg.rviz"/>
+
+  <include file="$(find hector_slam_example)/launch/default_mapping.launch"/> 
+  <include file="$(find hector_geotiff)/launch/geotiff_mapper.launch"/>
+
+  <node pkg="keyboard" type="keyboard" name="keyboard"/>
+
+  <node pkg="urg_process" type="laser_to_grid" name="laser_to_grid"/>
+  <node pkg="urg_process" type="grid_to_rviz" name="grid_to_rviz"/>
+
+  <node pkg="joystic_wheelchair" type="calculate_potential_from_grid" name="calculate_potential_from_grid"/>
+  <node pkg="joystic_wheelchair" type="follow_path" name="follow_path" output="screen"/>
+
+  <param name="arduino_port" value="/dev/ttyACM0" />
+  <node pkg="joystic_wheelchair" type="send_voltage_to_arduino" name="send_voltage_to_arduino"/>
+    
+</launch>

@@ -1,0 +1,7 @@
+<launch>
+
+  <node pkg="keyboard" type="keyboard" name="keyboard"/>
+
+  <node pkg="rosbag" type="record" name="record" args="-a -o /home/ishikawa/bagfiles"/> 
+
+</launch>

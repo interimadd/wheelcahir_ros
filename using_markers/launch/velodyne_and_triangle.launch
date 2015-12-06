@@ -1,0 +1,14 @@
+<launch>
+
+	<node pkg="using_markers" type="show_triangle" name="show_triangle" output="screen" />
+	<node pkg="velodyne_driver" type="velodyne_node" name="velodyne_node" output="screen">
+		<param name="model" value="VLP16" />
+		<param name="pcap" value="/home/ishikawa/bagfiles/Pedestrian.pcap" />
+		<param name="read_once" value="true"/>
+	</node>
+	<node pkg="velodyne_pointcloud" type="cloud_node" name="nanika" output="screen" >
+		 <param name="calibration" value="/home/ishikawa/catkin_ws/src/velodyne/velodyne_pointcloud/params/VLP16db.yaml"/> 
+	</node>
+	<node pkg="rviz" type="rviz" name="rviz" args="-d /home/ishikawa/catkin_ws/src/using_markers/launch/velodyne.rviz"/>
+
+</launch>

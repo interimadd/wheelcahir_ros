@@ -1,0 +1,13 @@
+<launch>
+
+	<param name="hokuyo_node/max_ang" value="2.2"/>
+  	<param name="hokuyo_node/min_ang" value="-2.2"/>
+  	<param name="port" type="string" value="/dev/ttyACM0" />
+  	<node pkg="hokuyo_node" type="hokuyo_node" name="hokuyo_node"/>
+
+  	<param name="encorder_port" type="string" value="/dev/ttyACM1" />
+  	<node pkg="joystic_wheelchair" type="calculate_odometory_from_rotary_encoder.py" name="calc_odom"/>
+
+  	<node pkg="rosbag" type="record" name="record" args="scan encoded_odom -o /home/ishikawa/bagfiles"/> 
+
+</launch>

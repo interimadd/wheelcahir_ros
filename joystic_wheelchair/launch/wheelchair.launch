@@ -1,0 +1,25 @@
+<launch>
+
+	<!-- USBポート番号の定義 -->
+	<arg name="joystic_port"       value="/dev/ttyACM0"/>
+	<arg name="encorder_port"      value="/dev/ttyACM1"/>
+	<arg name="imu_port"           value="/dev/ttyACM2"/>
+	<arg name="frontLRF_port"      value="/dev/ttyACM4"/>
+	<arg name="backLRF_port"       value="/dev/ttyACM4"/>
+	<arg name="front_tiltLRF_port" value="/dev/ttyACM3"/>
+
+	<!-- 各種センサ、arduinoへの接続 -->
+    <include file="$(find joystic_wheelchair)/launch_xml/wheelchair_keyboard.xml" > <arg name="joystic_port" value="$(arg joystic_port)"/> </include>
+ 	<include file="$(find joystic_wheelchair)/launch_xml/rotaryencoder.xml"> <arg name="encorder_port" value="$(arg encorder_port)"/> </include>
+    <include file="$(find joystic_wheelchair)/launch_xml/imu_and_pose_estimation.xml"> <arg name="imu_port" value="$(arg imu_port)"/> </include>
+    <include file="$(find joystic_wheelchair)/launch_xml/hokuyo_lidar.xml"> 
+    	<arg name="frontLRF_port"      value="$(arg frontLRF_port)"/> 
+    	<arg name="front_tiltLRF_port" value="$(arg front_tiltLRF_port)"/>
+    </include>
+
+    <!-- 各種ノード立ち上げ -->
+    <!-- <include file="$(find joystic_wheelchair)/launch_xml/gmapping.xml" />-->
+
+    <!-- おまけ -->
+
+</launch>

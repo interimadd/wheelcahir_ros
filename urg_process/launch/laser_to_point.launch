@@ -1,0 +1,10 @@
+<launch>
+
+	<param name="use_sim_time" value="true"/>
+
+	<node pkg="urg_process" type="laser_to_odom_frame.py" name="laser_to_odom_frame" output="screen"/>
+	<node pkg="urg_process" type="laser_scan_to_point_cloud" name="lser_to_point" output="screen"/>
+	<node pkg="rosbag" type="play" name="play" args="/home/ishikawa/bagfiles/detect_small_midle_big_object_as_step.bag --clock"/>
+	<node pkg="rviz" type="rviz" name="rviz" />
+
+</launch>
