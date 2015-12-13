@@ -9,7 +9,8 @@
 	<arg name="front_tiltLRF_port" value="/dev/ttyACM3"/>
 
 	<!-- 各種センサ、arduinoへの接続 -->
-    <include file="$(find joystic_wheelchair)/launch_xml/wheelchair_keyboard.xml" > <arg name="joystic_port" value="$(arg joystic_port)"/> </include>
+    <!-- <include file="$(find joystic_wheelchair)/launch_xml/wheelchair_keyboard.xml" > <arg name="joystic_port" value="$(arg joystic_port)"/> </include> -->
+    <include file="$(find joystic_wheelchair)/launch_xml/wheelcahir_cmd_vel_to_joystic.xml" > <arg name="joystic_port" value="$(arg joystic_port)"/> </include>
  	<include file="$(find joystic_wheelchair)/launch_xml/rotaryencoder.xml"> <arg name="encorder_port" value="$(arg encorder_port)"/> </include>
     <include file="$(find joystic_wheelchair)/launch_xml/imu_and_pose_estimation.xml"> <arg name="imu_port" value="$(arg imu_port)"/> </include>
     <include file="$(find joystic_wheelchair)/launch_xml/hokuyo_lidar.xml"> 
@@ -19,7 +20,14 @@
 
     <!-- 各種ノード立ち上げ -->
     <!-- <include file="$(find joystic_wheelchair)/launch_xml/gmapping.xml" />-->
+    <include file="$(find joystic_wheelchair)/launch_xml/navigation.xml" /> 
 
     <!-- おまけ -->
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find joystic_wheelchair)/launch_xml/costmap_and_laser.rviz"/>
 
 </launch>
+
+
+
+<!-- rosbagで必要なトピックだけをレコード -->
+<!-- rosrun rosbag record scan scan_tilt encoded_odom imu/data imu/data_raw imu/mag tf -o /home/ishikawa/bagfiles --> 

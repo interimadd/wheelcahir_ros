@@ -1,0 +1,9 @@
+<launch>
+	<arg name="joystic_port"/>
+
+	<node pkg="joystic_wheelchair" type="cmd_vel_to_voltage.py" name="comand" output="screen" />
+	<node pkg="joystic_wheelchair" type="voltage_to_joystic_input.py" name="voltage_to_joystic_input" output="screen">
+		<param name="joystic_port" value="$(arg joystic_port)" />
+	</node>
+
+</launch>

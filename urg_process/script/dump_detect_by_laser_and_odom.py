@@ -103,7 +103,8 @@ class HeightGridMap:
 
         #大きい穴を埋めるための補間 より遠くの周囲のマスを参照して、一番低いところの高さに合わせる
         tmp_map = deepcopy(self.map)
-        near_grid = [[-4,0],[0,-4],[0,4],[4,0]]
+        #near_grid = [[-4,0],[0,-4],[0,4],[4,0]]
+        near_grid = [[-2,-2],[-2,0],[-2,2],[0,-2],[0,2],[2,-2],[2,0],[2,-2]]
         for i in range(5,HEIGHT_MAP_DATA_NUM*2-5):
             for j in range(5,HEIGHT_MAP_DATA_NUM*2-5):
                 if self.map[i][j][1] == 0:
@@ -111,9 +112,9 @@ class HeightGridMap:
                     for n in range(0,len(near_grid)):
                         if tmp_map[ i + near_grid[n][0] ][ j + near_grid[n][1] ][1] > 0:
                             tmp_grid.append( tmp_map[ i + near_grid[n][0] ][ j + near_grid[n][1] ][0] )
-                    if len(tmp_grid)>0:
+                    if len(tmp_grid)>1:
                         tmp_grid.sort()
-                        self.map[i][j][0] = tmp_grid[0]
+                        self.map[i][j][0] = tmp_grid[int(len(tmp_grid)/2)]
                         self.map[i][j][1] = 1
 
         return 0
@@ -203,7 +204,6 @@ class ScanDataProcesser:
         if (self.grid_map_data.last_calc_x - trans[0]) * (self.grid_map_data.last_calc_x - trans[0]) + \
             (self.grid_map_data.last_calc_y - trans[1]) * (self.grid_map_data.last_calc_y - trans[1]) > UPDATE_DISTANCE * UPDATE_DISTANCE:
             self.grid_map_data.update(trans)
-            #self.grid_map_data.publish_height_data()
             #rospy.loginfo("lc_x %f,lf_x %f,lc_y %f,lf_y %f",self.grid_map_data.last_calc_x,self.laser_frame_trans[0],self.grid_map_data.last_calc_y,self.laser_frame_trans[1])
         
 

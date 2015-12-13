@@ -7,11 +7,11 @@ ros::Publisher pubTrackMarkers;
 const float TRIANGLE_LENGTH = 0.03f;
 
 const float MAX_STRENGTH = 4.0f;
-void strengthToRGB(float input_strength,float max_strength,std_msgs::ColorRGBA* c){
-  const int TABLE_SIZE = 20;
-  // 波長,R,G,B
-  const float RGB_TABLE[TABLE_SIZE][4] = 
-  {
+
+const int TABLE_SIZE = 20;
+// 波長,R,G,B
+const float RGB_TABLE[TABLE_SIZE][4] = 
+{
     { 420.0f ,0.31129f ,0.00000f ,0.60684f },
     { 430.0f ,0.39930f ,0.00000f ,0.80505f },
     { 440.0f ,0.40542f ,0.00000f ,0.87684f },
@@ -32,12 +32,22 @@ void strengthToRGB(float input_strength,float max_strength,std_msgs::ColorRGBA* 
     { 590.0f ,0.94726f ,0.49713f ,0.00000f },
     { 600.0f ,0.99803f ,0.31072f ,0.00000f },
     { 610.0f ,1.00000f ,0.00000f ,0.00000f },
-  };
+};
+const int STRENGTH_TABLE_SiZE = 6;
+//sin5',sin10',sin15',sin20',0.075m,0.10mの値
+const float STRENGTH_TABLE[STRENGTH_TABLE_SiZE]={
+  0.085f,0.17f,0.255f,0.34f,1.4f,1.9f
+} 
 
-  if(input_strength>=max_strength){
-    input_strength = max_strength - 0.001f;
+void strengthToRGB(float input_strength,std_msgs::ColorRGBA* c){
+
+  int tableNum = 0;
+  for(int i=0;i<STRENGTH_TABLE_SiZE;i++){
+    if(input_strength < STRENGTH_TABLE[i]){
+      tableNum = (i+1)*3;
+      break;
+    }
   }
-  int tableNum = int(float(TABLE_SIZE)*input_strength/max_strength);
   c->r = RGB_TABLE[tableNum][1];
   c->g = RGB_TABLE[tableNum][2];
   c->b = RGB_TABLE[tableNum][3];
@@ -81,7 +91,7 @@ void dumpCallback(const urg_process::VectorField::ConstPtr& msg){
 
   for(int i=0; i<msg->data_num; i++){
     float vector_length = sqrt(msg->vec[i].x * msg->vec[i].x + msg->vec[i].y * msg->vec[i].y);
-    strengthToRGB(vector_length,MAX_STRENGTH,&c);
+    strengthToRGB(vector_length,&c);
     createTriangle(msg->pos[i].x, msg->pos[i].y, atan2(msg->vec[i].y , msg->vec[i].x), c, &markerMsg);
     //ROS_INFO("%f,%f,%f",msg->pos[i].x,msg->pos[i].y,atan2(msg->vec[i].y , msg->vec[i].x) );
   }

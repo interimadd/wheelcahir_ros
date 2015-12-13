@@ -146,6 +146,8 @@ Visualization Manager:
           Value: true
         laser:
           Value: true
+        map_center:
+          Value: true
         odom:
           Value: true
       Marker Scale: 1
@@ -157,6 +159,8 @@ Visualization Manager:
         odom:
           base_link:
             laser:
+              {}
+            map_center:
               {}
       Update Interval: 0
       Value: true
@@ -183,23 +187,22 @@ Visualization Manager:
   Value: true
   Views:
     Current:
-      Class: rviz/Orbit
-      Distance: 2.05353
+      Class: rviz/FPS
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.06
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
-      Focal Point:
-        X: 5.78482
-        Y: -1.35736
-        Z: 0.292602
       Name: Current View
       Near Clip Distance: 0.01
       Pitch: 0.404128
+      Position:
+        X: 4.5268
+        Y: 0.0506003
+        Z: 1.10009
       Target Frame: <Fixed Frame>
-      Value: Orbit (rviz)
-      Yaw: 2.30001
+      Value: FPS (rviz)
+      Yaw: 5.4416
     Saved: ~
 Window Geometry:
   Displays:
@@ -217,5 +220,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1200
-  X: 55
-  Y: 54
+  X: 45
+  Y: 44

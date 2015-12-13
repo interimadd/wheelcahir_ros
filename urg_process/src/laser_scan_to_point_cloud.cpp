@@ -21,7 +21,7 @@ void ScanToPoint::scanCallback (const sensor_msgs::LaserScan::ConstPtr& scan_in)
   if(!listener_.waitForTransform(
         scan_in->header.frame_id,
         "/odom",
-        scan_in->header.stamp + ros::Duration().fromSec(scan_in->ranges.size()*scan_in->time_increment),
+        scan_in->header.stamp + ros::Duration(1.0),
         ros::Duration(1.0))){
      return;
   }
