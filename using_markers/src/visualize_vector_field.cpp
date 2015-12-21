@@ -8,6 +8,7 @@ const float TRIANGLE_LENGTH = 0.03f;
 
 const float MAX_STRENGTH = 4.0f;
 
+/*
 const int TABLE_SIZE = 20;
 // 波長,R,G,B
 const float RGB_TABLE[TABLE_SIZE][4] = 
@@ -33,25 +34,42 @@ const float RGB_TABLE[TABLE_SIZE][4] =
     { 600.0f ,0.99803f ,0.31072f ,0.00000f },
     { 610.0f ,1.00000f ,0.00000f ,0.00000f },
 };
+*/
+
 const int STRENGTH_TABLE_SiZE = 6;
 //sin5',sin10',sin15',sin20',0.075m,0.10mの値
 const float STRENGTH_TABLE[STRENGTH_TABLE_SiZE]={
   0.085f,0.17f,0.255f,0.34f,1.4f,1.9f
-} 
+};
+
+const float RGB_TABLE[STRENGTH_TABLE_SiZE+1][3] = 
+{
+  {0.000f ,0.03529f ,0.8118f},   //青
+  {0.2275f ,0.8118f ,0.6627f},   //水
+  {0.4118f ,0.7059f ,0.2353f},   //緑
+  {0.9373f ,0.9686f ,0.3922f},   //黄
+  {0.9686f ,0.6078f ,0.3922f},   //橙
+  {0.7059f ,0.02353f ,0.04314f}, //赤
+  {0.9686f ,0.6824f ,0.9020f},   //桃
+};
 
 void strengthToRGB(float input_strength,std_msgs::ColorRGBA* c){
 
   int tableNum = 0;
   for(int i=0;i<STRENGTH_TABLE_SiZE;i++){
     if(input_strength < STRENGTH_TABLE[i]){
-      tableNum = (i+1)*3;
+      tableNum = i;
       break;
     }
   }
-  c->r = RGB_TABLE[tableNum][1];
-  c->g = RGB_TABLE[tableNum][2];
-  c->b = RGB_TABLE[tableNum][3];
+  if( input_strength > STRENGTH_TABLE[STRENGTH_TABLE_SiZE-1] ){
+    tableNum = STRENGTH_TABLE_SiZE;
+  }
+  c->r = RGB_TABLE[tableNum][0];
+  c->g = RGB_TABLE[tableNum][1];
+  c->b = RGB_TABLE[tableNum][2];
   c->a = 1.0f;
+
 }
 
 void rotatePoint(geometry_msgs::Point *point,float yaw){

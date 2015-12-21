@@ -10,7 +10,7 @@
 	<node pkg="urg_process" type="laser_scan_to_point_cloud" name="laser_to_point" output="screen"/>
 	<node pkg="using_markers" type="visualize_vector_field" name="visualaize_dump" output="screen" />
 	<node pkg="using_markers" type="visualize_pointcloud" name="visualize_pointcloud" output="screen"/>
-	<node pkg="rosbag" type="play" name="play" args="/home/ishikawa/bagfiles/detect_small_midle_big_object_as_step.bag --clock"/>
+	<node pkg="rosbag" type="play" name="play" args="/home/ishikawa/bagfiles/detect_slope/detect_small_midle_big_object_as_step.bag --clock"/>
 	<node pkg="rviz" type="rviz" name="rviz" args="-d /home/ishikawa/catkin_ws/src/urg_process/launch/dump.rviz"/>
 
 </launch>

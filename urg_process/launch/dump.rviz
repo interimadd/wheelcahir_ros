@@ -105,7 +105,7 @@ Visualization Manager:
       Marker Topic: point_cloud
       Name: Marker
       Namespaces:
-        point_cloud: true
+        {}
       Queue Size: 100
       Value: true
     - Alpha: 1
@@ -144,7 +144,11 @@ Visualization Manager:
         All Enabled: true
         base_link:
           Value: true
+        imu:
+          Value: true
         laser:
+          Value: true
+        laser_tilt:
           Value: true
         map_center:
           Value: true
@@ -160,8 +164,12 @@ Visualization Manager:
           base_link:
             laser:
               {}
+            laser_tilt:
+              {}
             map_center:
               {}
+          imu:
+            {}
       Update Interval: 0
       Value: true
   Enabled: true
@@ -195,14 +203,14 @@ Visualization Manager:
         Value: false
       Name: Current View
       Near Clip Distance: 0.01
-      Pitch: 0.404128
+      Pitch: 0.854128
       Position:
-        X: 4.5268
-        Y: 0.0506003
-        Z: 1.10009
+        X: 6.65036
+        Y: -1.51058
+        Z: 4.0864
       Target Frame: <Fixed Frame>
       Value: FPS (rviz)
-      Yaw: 5.4416
+      Yaw: 2.59159
     Saved: ~
 Window Geometry:
   Displays:
@@ -220,5 +228,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1200
-  X: 45
-  Y: 44
+  X: 39
+  Y: 24

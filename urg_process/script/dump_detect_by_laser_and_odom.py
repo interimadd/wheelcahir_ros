@@ -133,8 +133,6 @@ class HeightGridMap:
                     self.map[num_x][num_y][0] = height_data[i][2]
                 self.map[num_x][num_y][1] += 1
                 #rospy.loginfo("%f,%f,%f,%d,%d,%f,%d",height_data[i][0],height_data[i][1],height_data[i][2],num_x,num_y,self.map[num_x][num_y][0],self.map[num_x][num_y][1])
-        #print height_data
-        #print "aaaaa"
 
     def publish_gradient(self):
         grad_data = VectorField()
@@ -143,7 +141,7 @@ class HeightGridMap:
         for i in range(1,HEIGHT_MAP_DATA_NUM*2-1):
             for j in range(1,HEIGHT_MAP_DATA_NUM*2-1):
                 absgrad = self.gradient_map[i][j][0]*self.gradient_map[i][j][0] + self.gradient_map[i][j][1]*self.gradient_map[i][j][1]
-                if 0.1<absgrad and absgrad<1000000:
+                if (0.03*0.03)<absgrad and absgrad<1000000:
                     if count % SHOW_RATE == 0:
                         tmp_pos = Vector3()
                         tmp_pos.x = (i - HEIGHT_MAP_DATA_NUM)*HEIGHT_MAP_DATA_GRID_LENGTH + self.center_x

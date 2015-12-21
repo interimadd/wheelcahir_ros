@@ -20,7 +20,8 @@
 
     <!-- 各種ノード立ち上げ -->
     <!-- <include file="$(find joystic_wheelchair)/launch_xml/gmapping.xml" />-->
-    <include file="$(find joystic_wheelchair)/launch_xml/navigation.xml" /> 
+    <include file="$(find joystic_wheelchair)/launch_xml/navigation.xml" />
+    <!-- <include file="$(find joystic_wheelchair)/launch_xml/record_waypoint.xml" /> -->
 
     <!-- おまけ -->
     <node pkg="rviz" type="rviz" name="rviz" args="-d $(find joystic_wheelchair)/launch_xml/costmap_and_laser.rviz"/>
