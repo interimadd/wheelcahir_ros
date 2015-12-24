@@ -12,6 +12,8 @@ find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
   message_generation
   laser_geometry
+  move_base_msgs
+  actionlib
 )
 
 ## System dependencies are found with CMake's conventions
@@ -210,4 +212,7 @@ target_link_libraries(grid_to_rviz ${catkin_LIBRARIES})
 
 add_executable(laser_scan_to_point_cloud src/laser_scan_to_point_cloud.cpp)
 target_link_libraries(laser_scan_to_point_cloud ${catkin_LIBRARIES})
+
+add_executable(simple_navigation_goals src/simple_navigation_goals.cpp)
+target_link_libraries(simple_navigation_goals ${catkin_LIBRARIES})
 

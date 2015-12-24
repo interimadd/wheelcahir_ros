@@ -45,8 +45,8 @@ class CalculateVoltage:
 		else:
 			self.vol.y = MID_VOL
 		"""
-		self.vol.x = MID_VOL + msg.linear.x * 3.0
-		self.vol.y = MID_VOL - msg.angular.z * 2.0
+		self.vol.x = MID_VOL + msg.linear.x * 2.5
+		self.vol.y = MID_VOL - msg.angular.z * 1.8
 
 	def calculate_and_publish_voltage(self):
 		rate = rospy.Rate(10)
