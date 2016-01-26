@@ -1,0 +1,9 @@
+float32 accel_opening 
+float32 max_velocity 
+float64 steer_angle 
+float64 vehicle_velocity 
+bool direction_switch 
+bool light_signal 
+bool left_winker
+bool right_winker
+bool hone_signal

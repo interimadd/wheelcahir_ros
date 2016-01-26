@@ -35,6 +35,9 @@ int loadWaypoints(){
   std::string str;
   ifs>>str;
   std::cout<<str<<std::endl;
+
+  FILE *fp;
+  fopen(&fp,"waypoint.txt","r");
 }
 
 void amclCallback(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& msg){
