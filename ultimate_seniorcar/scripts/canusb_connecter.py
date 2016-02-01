@@ -5,28 +5,20 @@ import rospy
 import time
 import serial
 from numpy import *
-from multiprocessing import Process, Value
+from multiprocessing import Process, Value, Array
 from ultimate_seniorcar.msg import SeniorcarState
 
 class CANUSB_Connecter:
-
-	accel_opening = 0
-	max_velocity = 0
-	steer_angle = 0
-	vehicle_velocity = 0
-	direction_switch = 0
-	light_signal = 0
-	left_winker = 0
-	right_winker = 0
-	hone_signal = 0
 
 	seniorcar_state = SeniorcarState()
 
 	def __init__(self):
 		rospy.init_node('canusb_connecter', anonymous=True)
-		self.pub = rospy.Publisher('seniorcar_state',SeniorcarState, queue_size=10)
+		self.pub = rospy.Publisher('seniorcar_state',SeniorcarState, queue_size=1000)
 		time.sleep(1)
 		self.connect_with_canusb()
+		self.pub.publish(self.seniorcar_state)
+		print self.pub
 
 
 	def connect_with_canusb(self):
@@ -89,6 +81,7 @@ class CANUSB_Connecter:
 	def start_spin(self):
 
 		self.can_override_flag = Value('i',0)
+		self.seniorcar_state_array = Array('d',(0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0))
 		self.read_process  = Process( target = self.read_candata, args=(''))
 		self.write_process = Process( target = self.write_candata,args=(''))
 
@@ -97,6 +90,44 @@ class CANUSB_Connecter:
 			self.write_process.start()
 		except rospy.ROSInterruptException:
 			pass
+
+		while not rospy.is_shutdown():
+			self.update_vehicle_data()
+			self.pub.publish(self.seniorcar_state)
+			time.sleep(0.1)
+
+
+	def update_vehicle_data(self):
+
+		self.seniorcar_state.accel_opening = self.seniorcar_state_array[0]
+		self.seniorcar_state.max_velocity = self.seniorcar_state_array[1]
+		self.seniorcar_state.steer_angle = self.seniorcar_state_array[2]
+		self.seniorcar_state.vehicle_velocity = self.seniorcar_state_array[3] / 3.6  #  [km/h]から[m/s]へ変換
+
+		if self.seniorcar_state_array[4] == 1 :
+			self.seniorcar_state.direction_switch = False
+		else:
+			self.seniorcar_state.direction_switch = True
+
+		if self.seniorcar_state_array[5] == 0 :
+			self.seniorcar_state.light_signal = False
+		else:
+			self.seniorcar_state.light_signal = True
+
+		if self.seniorcar_state_array[6] == 0 :
+			self.seniorcar_state.left_winker = False
+		else:
+			self.seniorcar_state.left_winker = True
+
+		if self.seniorcar_state_array[7] == 0 :
+			self.seniorcar_state.right_winker = False
+		else:
+			self.seniorcar_state.right_winker = True
+
+		if self.seniorcar_state_array[8] == 0 :
+			self.seniorcar_state.hone_signal = False
+		else:
+			self.seniorcar_state.hone_signal = True
 
 	
 	def read_candata(self):
@@ -116,7 +147,7 @@ class CANUSB_Connecter:
 				line = ""
 				i = 0
 				if can_id == "t01E":	# セニアカー走行データのID
-					self.update_vehicle_data(can_data)
+					self.update_can_information_array(can_data)
 				elif can_id == "t010":		# システム認識終了フラグの受信
 					if can_data[6:8] == "84":
 						self.can_override_flag.value = 1
@@ -130,27 +161,23 @@ class CANUSB_Connecter:
 				line = line + serial_bit
 				i = i + 1
 
-		ser.close()
+		self.ser.close()
 
 
-	def update_vehicle_data(self , can_data):
+	def update_can_information_array(self , can_data):
 
-		self.seniorcar_state.accel_opening    = float(int(can_data[:2] , 16)) / 127.0
-		self.seniorcar_state.max_velocity     = float(int(can_data[2:4] , 16)) / 100.0 * 4.0 + 2.0 
-		self.seniorcar_state.steer_angle      = float(int(can_data[6:8]   + can_data[4:6]  , 16)) / 10.0 - 90.0
-		self.seniorcar_state.vehicle_velocity = float(int(can_data[10:12] + can_data[8:10] , 16)) / 100.0
+		self.seniorcar_state_array[0] = float(int(can_data[:2] , 16)) / 127.0 # アクセル開度
+		self.seniorcar_state_array[1] = float(int(can_data[2:4] , 16)) / 100.0 * 4.0 + 2.0 #  最大速度
+		self.seniorcar_state_array[2] = float(int(can_data[6:8]   + can_data[4:6]  , 16)) / 10.0 - 90.0 # 操舵角度
+		self.seniorcar_state_array[3] = float(int(can_data[10:12] + can_data[8:10] , 16)) / 100.0 # 車両速度
 
 		# 1byteのデータからbit情報を抽出
 		byte7_data = int( can_data[14:16] ,16 )
-		self.seniorcar_state.direction_switch = byte7_data & 1
-		self.seniorcar_state.light_signal     = (byte7_data >> 1) & 1
-		self.seniorcar_state.left_winker      = (byte7_data >> 2) & 1
-		self.seniorcar_state.right_winker     = (byte7_data >> 3) & 1
-		self.seniorcar_state.hone_signal      = (byte7_data >> 4) & 1
-		print "acc %-4.2f per ,max_vel %-4.2f km/h ,steer_angle %-4.2f deg ,vel %-4.2f km/h ,vel %-4.2f m/s" % (self.seniorcar_state.accel_opening,self.seniorcar_state.max_velocity,self.seniorcar_state.steer_angle,self.seniorcar_state.vehicle_velocity,self.seniorcar_state.vehicle_velocity/3.6)
-		print "direction %d,light %d,left_winker %d,right_winker %d, hone_signal %d" % (self.seniorcar_state.direction_switch,self.seniorcar_state.light_signal,self.seniorcar_state.left_winker,self.seniorcar_state.right_winker,self.seniorcar_state.hone_signal)
-
-		self.pub.publish(self.seniorcar_state)
+		self.seniorcar_state_array[4] = byte7_data & 1
+		self.seniorcar_state_array[5] = (byte7_data >> 1) & 1
+		self.seniorcar_state_array[6] = (byte7_data >> 2) & 1
+		self.seniorcar_state_array[7] = (byte7_data >> 3) & 1
+		self.seniorcar_state_array[8] = (byte7_data >> 4) & 1
 
 
 if __name__ == '__main__':
