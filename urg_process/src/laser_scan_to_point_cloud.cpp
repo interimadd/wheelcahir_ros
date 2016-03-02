@@ -1,6 +1,8 @@
 #include <ros/ros.h>
 #include <laser_geometry/laser_geometry.h>
 #include <tf/transform_listener.h>
+#include <iostream>
+using namespace std;
 
 class ScanToPoint{
   private:
@@ -18,13 +20,17 @@ class ScanToPoint{
 
 void ScanToPoint::scanCallback (const sensor_msgs::LaserScan::ConstPtr& scan_in)
 {
+  cout << ros::Duration() << " " << ros::Time(0) << " " << scan_in->header.stamp << endl;
+  
   if(!listener_.waitForTransform(
         scan_in->header.frame_id,
         "/odom",
-        scan_in->header.stamp + ros::Duration(1.0),
+        scan_in->header.stamp + ros::Duration().fromSec(scan_in->ranges.size()*scan_in->time_increment),
         ros::Duration(1.0))){
      return;
   }
+  
+  cout << ros::Duration() << " " << ros::Time(0) << " " << scan_in->header.stamp << endl;
 
   sensor_msgs::PointCloud cloud;
   projector_.transformLaserScanToPointCloud("/odom",*scan_in,cloud,listener_);
@@ -39,7 +45,13 @@ ScanToPoint::ScanToPoint(int argc,char** argv){
 }
 
 void ScanToPoint::start(){
-  sub = n.subscribe("scan", 1000,&ScanToPoint::scanCallback,this);
+  string s;
+  if( !n.getParam("tilt_laser_topic",s) ){
+    s = "scan";
+  }
+  cout << s << endl;
+  ros::Duration(1.0).sleep();
+  sub = n.subscribe( s , 1000,&ScanToPoint::scanCallback,this);
   ros::spin();
 }
 

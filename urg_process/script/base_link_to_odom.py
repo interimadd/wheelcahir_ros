@@ -1,6 +1,8 @@
 #!/usr/bin/env python  
 # coding: UTF-8
 
+#オドメトリトピックをtfに変換
+
 import rospy
 import tf
 
@@ -24,7 +26,9 @@ def callback(last_odom):
 
 if __name__ == '__main__':
 
-    topic = rospy.get_param('odom_topic',"encoded_odom")
+    topic = rospy.get_param('odom_topic',"seniorcar_odometry")
+    offset = rospy.get_param('offset_between_ground_and_base_link',0)
+    print topic
     rospy.init_node('laser_to_odom_broadcaster')
     rospy.Subscriber(topic, Odometry, callback)
 
@@ -33,5 +37,6 @@ if __name__ == '__main__':
 
     while not rospy.is_shutdown():
         q = tf.transformations.quaternion_from_euler(0, 0, th)
-        br.sendTransform((x, y, 0),q,rospy.Time.now(),"base_link","odom") 
+        br.sendTransform((x, y, offset),q,rospy.Time.now(),"base_link","odom")
+        #print x,y,th
         rate.sleep()

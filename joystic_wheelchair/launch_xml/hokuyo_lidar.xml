@@ -1,7 +1,7 @@
 <launch>
 
 	<arg name="frontLRF_port" />
-	<arg name="front_tiltLRF_port" />
+	<!--<arg name="front_tiltLRF_port" />-->
 
 	<node pkg="hokuyo_node" type="hokuyo_node" name="hokuyo_node_front">
 		<param name="max_ang" value="2.2"/>
@@ -11,6 +11,7 @@
 
 	<node pkg="tf" type="static_transform_publisher" name="base_link_to_laser2" args="0.7 0.09 0.7 0.0 0.0 0.0 /base_link /laser 40" />
 
+	<!--
 	<node pkg="urg_node" type="urg_node" name="hokuyo_node_front_tilt">
 		<param name="angle_max" value="1.8"/>
   		<param name="angle_min" value="-1.8"/>
@@ -20,5 +21,6 @@
 	</node>
 
 	<node pkg="tf" type="static_transform_publisher" name="base_link_to_laser_tilt" args="0.7 0.09 1.05 0.0 0.65 0.0 /base_link /laser_tilt 40" />
+	-->
 
 </launch>

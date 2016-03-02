@@ -13,11 +13,11 @@ from numpy import *
 from urg_process.msg import VectorField
 
 #(7.2,400)(0.5,50)
-UPDATE_DISTANCE = 0.5               # 地図情報更新処理を行う距離
-HEIGHT_MAP_DATA_GRID_LENGTH = 0.025  # グリッドの一辺の長さ
-HEIGHT_MAP_DATA_NUM = 50            # 100なら200*200のマップ
+UPDATE_DISTANCE = 0.5                # 地図情報更新処理を行う距離
+HEIGHT_MAP_DATA_GRID_LENGTH = 0.125  # グリッドの一辺の長さ
+HEIGHT_MAP_DATA_NUM = 20             # 100なら200*200のマップ
 NOT_UPDATE = -1                      # 未更新のグリッドの高さ
-SHOW_RATE = 2                        # 勾配矢印を表示する数を何分の一にするか
+SHOW_RATE = 1                        # 勾配矢印を表示する数を何分の一にするか
 
 class HeightGridMap:
 
@@ -127,10 +127,10 @@ class HeightGridMap:
             num_x = int(HEIGHT_MAP_DATA_NUM + ( height_data[i][0] - self.center_x ) / HEIGHT_MAP_DATA_GRID_LENGTH)
             num_y = int(HEIGHT_MAP_DATA_NUM + ( height_data[i][1] - self.center_y ) / HEIGHT_MAP_DATA_GRID_LENGTH)
             if abs(num_x) < HEIGHT_MAP_DATA_NUM*2 and abs(num_y) < HEIGHT_MAP_DATA_NUM*2:
-                #self.map[num_x][num_y][0] = (self.map[num_x][num_y][0]*self.map[num_x][num_y][1] + height_data[i][2]) / (self.map[num_x][num_y][1] + 1) # これまで得られている値との平均を記録
+                self.map[num_x][num_y][0] = (self.map[num_x][num_y][0]*self.map[num_x][num_y][1] + height_data[i][2]) / (self.map[num_x][num_y][1] + 1) # これまで得られている値との平均を記録
                 #self.map[num_x][num_y][0] = height_data[i][2]
-                if self.map[num_x][num_y][0] < height_data[i][2]:
-                    self.map[num_x][num_y][0] = height_data[i][2]
+                #if self.map[num_x][num_y][0] < height_data[i][2]:
+                #    self.map[num_x][num_y][0] = height_data[i][2]
                 self.map[num_x][num_y][1] += 1
                 #rospy.loginfo("%f,%f,%f,%d,%d,%f,%d",height_data[i][0],height_data[i][1],height_data[i][2],num_x,num_y,self.map[num_x][num_y][0],self.map[num_x][num_y][1])
 
@@ -141,7 +141,7 @@ class HeightGridMap:
         for i in range(1,HEIGHT_MAP_DATA_NUM*2-1):
             for j in range(1,HEIGHT_MAP_DATA_NUM*2-1):
                 absgrad = self.gradient_map[i][j][0]*self.gradient_map[i][j][0] + self.gradient_map[i][j][1]*self.gradient_map[i][j][1]
-                if (0.03*0.03)<absgrad and absgrad<1000000:
+                if (0.0*0.0)<absgrad and absgrad<1000000:
                     if count % SHOW_RATE == 0:
                         tmp_pos = Vector3()
                         tmp_pos.x = (i - HEIGHT_MAP_DATA_NUM)*HEIGHT_MAP_DATA_GRID_LENGTH + self.center_x

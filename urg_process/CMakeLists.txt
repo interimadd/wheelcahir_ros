@@ -216,3 +216,9 @@ target_link_libraries(laser_scan_to_point_cloud ${catkin_LIBRARIES})
 add_executable(simple_navigation_goals src/simple_navigation_goals.cpp)
 target_link_libraries(simple_navigation_goals ${catkin_LIBRARIES})
 
+add_executable(laser_point_to_voxcel_map 
+  src/voxcel_map/voxcel_map.cpp
+  src/voxcel_map/laser_point_to_voxcel_map.cpp
+)
+target_link_libraries(laser_point_to_voxcel_map ${catkin_LIBRARIES})
+

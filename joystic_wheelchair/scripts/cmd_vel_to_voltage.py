@@ -29,22 +29,6 @@ class CalculateVoltage:
 		rospy.Subscriber("cmd_vel", Twist, self.cmd_velCallback)
 
 	def cmd_velCallback(self,msg):
-
-		"""
-		if msg.linear.x > 0.05:
-			self.vol.x = MID_VOL + OUT_VOL[self.vol_index]
-		elif msg.linear.x < -0.05:
-			self.vol.x = MID_VOL - OUT_VOL[self.vol_index]
-		else:
-			self.vol.x = MID_VOL
-
-		if msg.angular.z > 0.1:
-			self.vol.y = MID_VOL - OUT_VOL[self.vol_index] 
-		elif msg.angular.z < -0.1:
-			self.vol.y = MID_VOL + OUT_VOL[self.vol_index] 
-		else:
-			self.vol.y = MID_VOL
-		"""
 		self.vol.x = MID_VOL + msg.linear.x * 2.5
 		self.vol.y = MID_VOL - msg.angular.z * 1.8
 
