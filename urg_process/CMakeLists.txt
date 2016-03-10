@@ -222,3 +222,8 @@ add_executable(laser_point_to_voxcel_map
 )
 target_link_libraries(laser_point_to_voxcel_map ${catkin_LIBRARIES})
 
+add_executable(laser_point_to_height_map 
+  src/height_map/height_map.cpp
+  src/height_map/laser_point_to_height_map.cpp
+)
+target_link_libraries(laser_point_to_height_map ${catkin_LIBRARIES})

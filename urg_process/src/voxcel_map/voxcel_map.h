@@ -40,9 +40,14 @@ class Voxcel_Map{
 		void VoxcelToPointCloud(sensor_msgs::PointCloud *out);
 
 		/*
-			VoxcelMapの中心座標を移動させる
+			VoxcelMapの中心座標を移動させる,
 		*/
 		void MoveVoxcelMapCenter(float pos_x,float pos_y,float pos_z);
+
+		/*
+			タイヤの大きさを指定して、転動の可否を判断するパラメータを計算
+		*/
+		void SetTireRadius(float tire_radius,float tire_width);
 
 
 	private:
@@ -58,6 +63,18 @@ class Voxcel_Map{
 			配列の番号から実世界座標に変換するのに使う
 		*/
 		geometry_msgs::Point32 TranslateIndexToRealCordinate(int x_index,int y_index,int z_index);
+
+		/*
+			あるグリッド上でx方向,y方向にそれぞれ転動可能かを識別する
+			tire_height:車輪中心を(0,0)としたとき、車輪の外周はグリッドの中で何マス目にあるのかを計算しておく
+			enable_rolling_threshold:車輪のボクセルとの接触角度が60°以上で転動できないため、60°がグリッドになったタイヤのどこの座標に相等するかを計算しておく
+		*/
+		bool isEnableRolling(int x_index,int y_index);
+		vector<int> tire_height;
+		int half_tire_width;
+		int enable_rolling_threshold;
+
+		int returnMaxHeightZindex(int x_index,int y_index,int min_z_index,int max_z_index);
 
 };
 

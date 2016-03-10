@@ -127,3 +127,44 @@ void Voxcel_Map::MoveVoxcelMapCenter(float pos_x,float pos_y,float pos_z){
 	printf("count:%d,%d\n",count2,count);
 
 }
+
+
+inline bool Voxcel_Map::isEnableRolling(int x_index,int y_index){
+
+	int tmp_max_x = 0;
+	int tmp_map_y = 0;
+	int tmp_max_z = 0;
+
+	//for(int i=0; i < tire_radius; i++){
+		
+	//}
+	return true;
+}
+
+
+void Voxcel_Map::SetTireRadius(float tire_radius,float tire_width){
+
+	enable_rolling_threshold = tire_radius / (2.0 * HORIZONTAL_RESOLUTION);
+	half_tire_width = tire_width / (2.0 * HORIZONTAL_RESOLUTION);
+
+	int max_i = tire_radius / HORIZONTAL_RESOLUTION;
+	for(int i=0;i<max_i;i++){
+		int tmp_height = (sqrt(pow(tire_radius,2) - pow(HORIZONTAL_RESOLUTION*i,2))) / VERTICAL_RESOLUTION;
+		tire_height.push_back(tmp_height);
+	}
+
+}
+
+
+inline int Voxcel_Map::returnMaxHeightZindex(int x_index,int y_index,int min_z_index,int max_z_index){
+
+	int max_i = max_z_index - min_z_index;
+	for(int i=0;i<max_i;i++){
+		if( voxcel_map[x_index][y_index][max_z_index-i] == MARKED){
+			return max_z_index - i;
+		}
+	}
+
+	return min_z_index;
+
+}
